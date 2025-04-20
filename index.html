@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Todo List</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        .todo-container {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #5f6368;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            margin-top:10px;
+            font-size: 16px;
+            border: none;
+            background-color: #2d7e2f;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .todo-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            transition: background-color 0.3s ease;
+        }
+
+        .todo-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        .todo-item input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            font-size: 16px;
+            border: none;
+            background-color: #FF6347;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #e5533f;
+        }
+
+        .todo-item span {
+            flex-grow: 1;
+            text-align: left;
+            color: #333;
+        }
+
+       
+        .strikethrough {
+            text-decoration: line-through;
+            color: #bbb;
+        }
+    </style>
+</head>
+<body ng-app="myApp" ng-controller="todoCtrl">
+
+    <div class="todo-container">
+        <h2>My Todo List</h2>
+
+        <form ng-submit="todoAdd()">
+            <input type="text" ng-model="todoInput" placeholder="Add New Todo">
+            <input type="submit" value="Add New">
+        </form>
+
+        <div ng-repeat="x in todoList" class="todo-item">
+            <input type="checkbox" ng-model="x.done">
+            <span ng-bind="x.todoText" ng-class="{'strikethrough': x.done}"></span>
+        </div>
+
+        <p><button ng-click="remove()">Remove marked</button></p>
+    </div>
+
+    <script>
+        var app = angular.module('myApp', []); 
+        app.controller('todoCtrl', function($scope) {
+            $scope.todoList = [{todoText:'Clean House', done:false}];
+
+            $scope.todoAdd = function() {
+                $scope.todoList.push({todoText:$scope.todoInput, done:false});
+                $scope.todoInput = "";
+            };
+
+            $scope.remove = function() {
+                var oldList = $scope.todoList;
+                $scope.todoList = [];
+                angular.forEach(oldList, function(x) {
+                    if (!x.done) $scope.todoList.push(x);
+                });
+            };
+        });
+    </script>
+
+</body>
+</html>
